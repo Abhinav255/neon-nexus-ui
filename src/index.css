@@ -1,144 +1,211 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+  --cyber-black: #060a16;
+  --cyber-panel: #0f172a;
+  --cyber-blue: #0ea5e9;
+  --cyber-magenta: #d946ef;
+  --cyber-purple: #8b5cf6;
+  --cyber-cyan: #06b6d4;
+  --cyber-yellow: #fbbf24;
+}
 
-@layer base {
-  :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+/* Global styles */
+body {
+  background-color: var(--cyber-black);
+  color: white;
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+/* Cyberpunk typography */
+.cyber-text {
+  position: relative;
+  display: inline-block;
+  text-shadow: 0 0 5px rgba(14, 165, 233, 0.5);
+  letter-spacing: 0.05em;
+}
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+/* Cyberpunk panel styles */
+.cyber-panel {
+  position: relative;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(14, 165, 233, 0.1);
+  overflow: hidden;
+}
 
-    --primary: 185 100% 50%;
-    --primary-foreground: 0 0% 0%;
+.cyber-panel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.4), transparent);
+}
 
-    --secondary: 300 100% 50%;
-    --secondary-foreground: 240 10% 3.9%;
+.cyber-panel-sm {
+  position: relative;
+  background-color: rgba(15, 23, 42, 0.4);
+  border-radius: 0.25rem;
+  border: 1px solid rgba(14, 165, 233, 0.1);
+}
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+/* Scrollbar */
+.cyber-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+.cyber-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+.cyber-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(14, 165, 233, 0.3);
+  border-radius: 3px;
+}
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 185 100% 50%;
+.cyber-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(14, 165, 233, 0.5);
+}
 
-    --radius: 0.5rem;
-
-    --sidebar-background: 240 10% 3.9%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 185 100% 50%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 185 100% 50%;
+/* Cyberpunk animated effects */
+@keyframes rotate-glow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
-@layer base {
-  * {
-    @apply border-border selection:bg-cyber-blue/20 selection:text-white;
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.2;
   }
-  
-  body {
-    @apply bg-cyber-black text-foreground antialiased overflow-x-hidden;
-    background-image: 
-      radial-gradient(circle at 25% 25%, rgba(0, 114, 255, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
-    background-attachment: fixed;
-  }
-
-  html {
-    @apply scroll-smooth;
+  50% {
+    opacity: 0.5;
   }
 }
 
-@layer components {
-  .cyber-panel {
-    @apply relative bg-black/30 backdrop-blur-xl border border-white/10 shadow-[0_4px_15px_-2px_rgba(0,0,0,0.3)] rounded-md overflow-hidden;
+@keyframes reverse-spin {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-rotate-glow {
+  animation: rotate-glow 25s linear infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-reverse-spin {
+  animation: reverse-spin 30s linear infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Glitch Effect for Buttons */
+.glitch {
+  position: relative;
+}
+
+.glitch-effect, .glitch-effect-2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.glitch .glitch-effect {
+  left: -2px;
+  color: rgba(217, 70, 239, 0.8);
+  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
+.glitch .glitch-effect-2 {
+  left: 2px;
+  color: rgba(14, 165, 233, 0.8);
+  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Tailwind utility extensions */
+@layer utilities {
+  .bg-cyber-black {
+    background-color: var(--cyber-black);
   }
   
-  .cyber-panel::before {
-    @apply content-[''] absolute inset-0 bg-gradient-to-br from-cyber-blue/10 to-cyber-magenta/10 opacity-40 pointer-events-none;
+  .bg-cyber-panel {
+    background-color: var(--cyber-panel);
   }
   
-  .cyber-panel-glow {
-    @apply relative bg-black/30 backdrop-blur-xl border border-white/10 rounded-md overflow-hidden;
-    box-shadow: 0 0 10px rgba(0, 114, 255, 0.3), 0 0 20px rgba(0, 114, 255, 0.1);
+  .text-cyber-blue {
+    color: var(--cyber-blue);
   }
   
-  .cyber-panel-glow::before {
-    @apply content-[''] absolute inset-0 bg-gradient-to-br from-cyber-blue/10 to-cyber-magenta/10 opacity-40 pointer-events-none;
+  .text-cyber-magenta {
+    color: var(--cyber-magenta);
   }
   
-  .cyber-border {
-    @apply relative;
+  .bg-cyber-blue\/10 {
+    background-color: rgba(14, 165, 233, 0.1);
   }
   
-  .cyber-border::before {
-    @apply content-[''] absolute -inset-[1px] rounded-md bg-gradient-to-r from-cyber-blue via-cyber-magenta to-cyber-blue bg-[length:200%_100%] animate-border-flow;
-    z-index: -1;
+  .bg-cyber-magenta\/10 {
+    background-color: rgba(217, 70, 239, 0.1);
   }
   
-  .cyber-text {
-    @apply font-cyber font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyber-blue via-cyber-cyan to-cyber-blue bg-[length:200%_100%] animate-text-shimmer;
+  .border-cyber-blue\/20 {
+    border-color: rgba(14, 165, 233, 0.2);
   }
   
-  .cyber-button {
-    @apply inline-flex items-center justify-center whitespace-nowrap rounded-md border border-cyber-blue/30 bg-gradient-to-b from-cyber-blue/10 to-cyber-blue/5 px-6 py-2 text-sm font-cyber text-cyber-blue shadow-[0_0_10px_rgba(0,114,255,0.3)] hover:shadow-[0_0_15px_rgba(0,114,255,0.4)] transition-all duration-200 hover:border-cyber-blue/50 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-500;
-  }
-  
-  .cyber-input {
-    @apply flex h-10 w-full rounded-md border border-white/10 bg-black/30 backdrop-blur-md py-2 px-3 text-sm text-white placeholder:text-white/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyber-blue disabled:cursor-not-allowed disabled:opacity-50;
-  }
-  
-  .cyber-heading {
-    @apply font-cyber tracking-wide text-white;
-  }
-  
-  .cyber-subheading {
-    @apply text-sm uppercase tracking-widest text-cyber-blue/70 font-cyber;
-  }
-  
-  .cyber-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 114, 255, 0.3) rgba(0, 0, 0, 0.1);
-  }
-  
-  .cyber-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  
-  .cyber-scrollbar::-webkit-scrollbar-track {
-    @apply bg-black/30 rounded-full;
-  }
-  
-  .cyber-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-cyber-blue/30 rounded-full hover:bg-cyber-blue/50 transition-colors;
-  }
-  
-  .neon-glow-text {
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.7), 0 0 10px rgba(0, 255, 255, 0.5);
-  }
-  
-  .text-outline {
-    -webkit-text-stroke: 1px rgba(0, 255, 255, 0.5);
-    text-stroke: 1px rgba(0, 255, 255, 0.5);
+  .border-cyber-magenta\/20 {
+    border-color: rgba(217, 70, 239, 0.2);
   }
 }

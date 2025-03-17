@@ -1,116 +1,93 @@
 
-import React, { useRef, useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useRef, useEffect } from 'react';
 
 const CyberButton = ({ 
   children, 
-  variant = 'default', 
-  size = 'default', 
-  className,
-  magneticEffect = true,
-  glowIntensity = 'medium',
+  variant = 'primary', 
+  size = 'md', 
+  className = '', 
+  glitch = false,
+  magnetic = false,
+  onClick,
   ...props 
 }) => {
-  const buttonRef = useRef(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [isGlitching, setIsGlitching] = useState(false);
+  const ref = useRef(null);
   
-  // Variants styling
-  const variants = {
-    default: 'border-cyber-blue/30 bg-gradient-to-b from-cyber-blue/10 to-cyber-blue/5 text-cyber-blue hover:text-white',
-    primary: 'border-cyber-cyan/30 bg-gradient-to-b from-cyber-cyan/20 to-cyber-cyan/5 text-cyber-cyan hover:text-white',
-    secondary: 'border-cyber-magenta/30 bg-gradient-to-b from-cyber-magenta/10 to-cyber-magenta/5 text-cyber-magenta hover:text-white',
-    accent: 'border-cyber-purple/30 bg-gradient-to-b from-cyber-purple/10 to-cyber-purple/5 text-cyber-purple hover:text-white',
-    outline: 'border-white/20 bg-transparent text-white hover:border-cyber-blue/50 hover:text-cyber-blue',
-    ghost: 'border-transparent bg-transparent text-white hover:bg-white/5',
-    destructive: 'border-cyber-red/30 bg-gradient-to-b from-cyber-red/10 to-cyber-red/5 text-cyber-red hover:text-white',
+  // Magnetic effect
+  const handleMouseMove = (e) => {
+    if (!magnetic || !ref.current) return;
+    
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    
+    const x = (clientX - (left + width / 2)) * 0.15;
+    const y = (clientY - (top + height / 2)) * 0.15;
+    
+    setPos({ x, y });
   };
   
-  // Sizes styling
-  const sizes = {
-    default: 'h-10 px-6 py-2 text-sm',
-    sm: 'h-8 px-4 py-1 text-xs',
-    lg: 'h-12 px-8 py-3 text-base',
-    icon: 'h-10 w-10'
+  const handleMouseLeave = () => {
+    setPos({ x: 0, y: 0 });
+    setIsHovering(false);
   };
   
-  // Glow intensity settings
-  const glowSettings = {
-    low: '0 0 5px',
-    medium: '0 0 10px',
-    high: '0 0 20px', 
-    none: '0 0 0'
+  const handleMouseEnter = () => {
+    setIsHovering(true);
   };
   
-  const glowColors = {
-    default: 'rgba(0, 114, 255, 0.3)',
-    primary: 'rgba(0, 255, 255, 0.3)',
-    secondary: 'rgba(255, 0, 255, 0.3)',
-    accent: 'rgba(153, 51, 255, 0.3)',
-    outline: 'rgba(255, 255, 255, 0.15)',
-    ghost: 'transparent',
-    destructive: 'rgba(255, 0, 51, 0.3)'
-  };
-  
-  const glow = glowSettings[glowIntensity] || glowSettings.medium;
-  const glowColor = glowColors[variant] || glowColors.default;
-  
+  // Glitch effect
   useEffect(() => {
-    if (!magneticEffect || !buttonRef.current || !isHovered) {
-      setPosition({ x: 0, y: 0 });
-      return;
+    if (glitch && isHovering) {
+      const glitchInterval = setInterval(() => {
+        setIsGlitching(true);
+        setTimeout(() => setIsGlitching(false), 100);
+      }, 2000);
+      
+      return () => clearInterval(glitchInterval);
     }
-    
-    const handleMouseMove = (e) => {
-      const button = buttonRef.current;
-      if (!button) return;
-      
-      const rect = button.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      const distanceX = e.clientX - centerX;
-      const distanceY = e.clientY - centerY;
-      
-      // Magnetic strength - lower number means stronger pull
-      const strength = 15;
-      
-      setPosition({
-        x: distanceX / strength,
-        y: distanceY / strength
-      });
-    };
-    
-    document.addEventListener('mousemove', handleMouseMove);
-    
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [magneticEffect, isHovered]);
+  }, [glitch, isHovering]);
+  
+  // Generate button classes based on props
+  const variantClasses = {
+    primary: 'bg-cyber-blue hover:bg-cyber-blue/90 text-white',
+    secondary: 'bg-cyber-magenta hover:bg-cyber-magenta/90 text-white',
+    outline: 'bg-transparent border border-cyber-blue text-cyber-blue hover:bg-cyber-blue/10',
+    ghost: 'bg-transparent text-cyber-blue hover:bg-cyber-blue/10'
+  };
+  
+  const sizeClasses = {
+    sm: 'px-3 py-1 text-sm',
+    md: 'px-4 py-2',
+    lg: 'px-6 py-3 text-lg'
+  };
+  
+  const baseClasses = 'relative inline-flex items-center justify-center rounded font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyber-blue/50 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
+  
+  const computedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
   
   return (
     <button
-      ref={buttonRef}
-      className={cn(
-        'relative inline-flex items-center justify-center whitespace-nowrap rounded-md border font-cyber transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-500 disabled:pointer-events-none disabled:opacity-50',
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      ref={ref}
+      className={`${computedClasses} ${isGlitching ? 'glitch' : ''}`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseEnter}
+      onClick={onClick}
       style={{
-        transform: `translate(${position.x}px, ${position.y}px)`,
-        boxShadow: isHovered ? `${glow} ${glowColor}` : `0 0 0 transparent`
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        setPosition({ x: 0, y: 0 });
+        transform: `translate(${pos.x}px, ${pos.y}px)`,
       }}
       {...props}
     >
-      <span className="relative z-10 flex items-center justify-center gap-2">
-        {children}
-      </span>
+      {glitch && (
+        <>
+          <span className="absolute inset-0 flex items-center justify-center opacity-0 glitch-effect">{children}</span>
+          <span className="absolute inset-0 flex items-center justify-center opacity-0 glitch-effect-2">{children}</span>
+        </>
+      )}
+      <span className="relative z-10">{children}</span>
     </button>
   );
 };

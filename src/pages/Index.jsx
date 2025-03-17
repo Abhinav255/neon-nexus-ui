@@ -1,13 +1,14 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Card from '../components/Card';
 import CyberButton from '../components/CyberButton';
 import { BarChart4, Users, Package, TrendingUp, Activity, Zap } from 'lucide-react';
 
 const statCards = [
-  { title: 'Total Users', value: '2,846', icon: Users, color: 'blue', trend: '+12%' },
-  { title: 'Active Products', value: '1,245', icon: Package, color: 'magenta', trend: '+5%' },
+  { title: 'Total Users', value: '2,846', icon: Users, color: 'blue', trend: '+12%', link: '/users' },
+  { title: 'Active Products', value: '1,245', icon: Package, color: 'magenta', trend: '+5%', link: '/products' },
   { title: 'Revenue', value: '$42.5k', icon: TrendingUp, color: 'cyan', trend: '+8%' },
   { title: 'System Status', value: 'Optimal', icon: Activity, color: 'purple', trend: '99.8%' }
 ];
@@ -33,21 +34,23 @@ const Index = () => {
           {statCards.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <Card key={index} className="p-4" glowColor={stat.color}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium text-gray-400">{stat.title}</div>
-                    <div className="text-2xl font-bold text-white">{stat.value}</div>
+              <Link key={index} to={stat.link || '#'} className="block">
+                <Card className="p-4 hover:shadow-lg hover:shadow-cyber-blue/20 transition-all" glowColor={stat.color}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-medium text-gray-400">{stat.title}</div>
+                      <div className="text-2xl font-bold text-white">{stat.value}</div>
+                    </div>
+                    <div className={`rounded-full p-2 bg-cyber-${stat.color}/10`}>
+                      <Icon className={`h-6 w-6 text-cyber-${stat.color}`} />
+                    </div>
                   </div>
-                  <div className={`rounded-full p-2 bg-cyber-${stat.color}/10`}>
-                    <Icon className={`h-6 w-6 text-cyber-${stat.color}`} />
+                  <div className="mt-2">
+                    <span className="text-xs font-medium text-green-400">{stat.trend}</span>
+                    <span className="ml-1 text-xs text-gray-400">from last month</span>
                   </div>
-                </div>
-                <div className="mt-2">
-                  <span className="text-xs font-medium text-green-400">{stat.trend}</span>
-                  <span className="ml-1 text-xs text-gray-400">from last month</span>
-                </div>
-              </Card>
+                </Card>
+              </Link>
             );
           })}
         </div>
@@ -76,9 +79,11 @@ const Index = () => {
             </div>
             
             <div className="mt-4">
-              <CyberButton variant="ghost" size="sm" className="w-full">
-                View All Activity
-              </CyberButton>
+              <Link to="/users">
+                <CyberButton variant="ghost" size="sm" className="w-full">
+                  View All Activity
+                </CyberButton>
+              </Link>
             </div>
           </Card>
           
@@ -123,9 +128,13 @@ const Index = () => {
           
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <CyberButton>Generate Report</CyberButton>
-            <CyberButton variant="secondary">Add Product</CyberButton>
+            <Link to="/products/add">
+              <CyberButton variant="secondary" className="w-full">Add Product</CyberButton>
+            </Link>
             <CyberButton variant="outline">System Scan</CyberButton>
-            <CyberButton variant="ghost">Settings</CyberButton>
+            <Link to="/users/add">
+              <CyberButton variant="ghost" className="w-full">Add User</CyberButton>
+            </Link>
           </div>
         </div>
       </div>

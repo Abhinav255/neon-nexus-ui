@@ -1,8 +1,11 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import UserTable from '../components/UserTable';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { PlusCircle, ArrowLeft } from 'lucide-react';
 
 // Mock data for users
 const mockUsers = [
@@ -76,7 +79,23 @@ const Users = () => {
     <Layout>
       <div className="space-y-6 p-2 md:p-6">
         <div className="flex flex-col space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight text-cyber-blue">User Management</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-bold tracking-tight text-cyber-blue">User Management</h2>
+            <div className="space-x-2">
+              <Link to="/">
+                <Button variant="outline" size="sm" className="border-cyber-blue/20 text-cyber-blue">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Button>
+              </Link>
+              <Link to="/users/add">
+                <Button className="bg-cyber-blue hover:bg-cyber-blue/90 text-white">
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Add User
+                </Button>
+              </Link>
+            </div>
+          </div>
           <p className="text-muted-foreground">
             Manage your system users from this central dashboard.
           </p>

@@ -21,7 +21,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Users />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/add" element={<AddUser />} />
           <Route path="/products" element={<Products />} />
@@ -32,7 +32,7 @@ const App = () => (
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
-  </QueryClientProvider>
+   </QueryClientProvider>
 );
 
 export default App;
